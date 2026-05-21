@@ -185,7 +185,8 @@ export class SodexClient {
     });
 
     this.ws.on('close', () => {
-      console.log('[SodexClient] WS Disconnected');
+      console.log('[SodexClient] WS Disconnected. Reconnecting in 5s...');
+      setTimeout(() => this.connectWs(onMessage), 5000);
     });
   }
 
