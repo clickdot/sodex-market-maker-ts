@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+*.log
+*.js.map
+
+# Probe/test scripts
+probe.js
+find-account.js
+ws-test.js
