@@ -7,6 +7,9 @@ A TypeScript market maker bot for [SoDEX](https://sodex.com) Perpetuals, inspire
 - Continuous two-sided quoting (bid + ask) on a configurable interval
 - EIP-712 signed order submission via SoDEX REST API
 - Automatic cancellation and refresh of stale quotes
+- Fixed dollar spread (`SPREAD_DOLLARS=1` for $1 wide quotes)
+- USD notional order sizing (`ORDER_SIZE_USD=100` for $100 per side)
+- WebSocket auto-reconnect for unattended server operation
 
 ## Setup
 
@@ -26,8 +29,8 @@ A TypeScript market maker bot for [SoDEX](https://sodex.com) Perpetuals, inspire
    ACCOUNT_ID=121401              # Your SoDEX perps account ID
    SYMBOL_ID=1                    # 1 = BTC-USD
    SYMBOL=BTC-USD
-   SPREAD=0.001                   # 0.1% spread (half each side)
-   ORDER_SIZE=0.1                 # Size in BTC
+   SPREAD_DOLLARS=1               # $1 wide spread (or use SPREAD=0.001 for %)
+   ORDER_SIZE_USD=100             # $100 per side (or use ORDER_SIZE=0.1 for BTC)
    QUOTE_INTERVAL_MS=5000         # Re-quote every 5 seconds
    ```
 
@@ -46,8 +49,10 @@ A TypeScript market maker bot for [SoDEX](https://sodex.com) Perpetuals, inspire
 | `ACCOUNT_ID` | SoDEX perps account integer ID | required |
 | `SYMBOL_ID` | Instrument integer ID (1=BTC-USD) | `1` |
 | `SYMBOL` | Trading pair string | `BTC-USD` |
-| `SPREAD` | Total spread as decimal (0.001 = 0.1%) | `0.001` |
-| `ORDER_SIZE` | Order size in base asset | `0.1` |
+| `SPREAD` | Percentage spread (0.001 = 0.1%) — ignored if `SPREAD_DOLLARS` is set | `0.001` |
+| `SPREAD_DOLLARS` | Fixed dollar spread between bid and ask (e.g. `1` = $1 wide) | — |
+| `ORDER_SIZE` | Order size in BTC — ignored if `ORDER_SIZE_USD` is set | `0.1` |
+| `ORDER_SIZE_USD` | Order size in USD notional (e.g. `100` = $100 per side) | — |
 | `QUOTE_INTERVAL_MS` | Re-quote interval in ms | `5000` |
 
 ## How It Works
