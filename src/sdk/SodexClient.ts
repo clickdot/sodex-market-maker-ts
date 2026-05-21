@@ -125,6 +125,12 @@ export class SodexClient {
         },
       });
       console.log(`[SodexClient] Order response:`, JSON.stringify(response.data));
+      // Check inner per-order result — code=0 means accepted, code=-1 means rejected
+      const orderResult = response.data?.data?.[0];
+      if (!orderResult || orderResult.code !== 0) {
+        console.error(`[SodexClient] Order rejected: ${orderResult?.error}`);
+        return null; // don't track rejected orders
+      }
       return clOrdID;
     } catch (error: any) {
       console.error('[SodexClient] Error placing order:', error.response?.data || error.message);

@@ -27,8 +27,10 @@ export class PricingEngine {
     }
 
     // Compute BTC quantity: either fixed BTC size or USD notional / mid price
+    // SoDEX minimum order size is 0.001 BTC — round to 3 decimal places
+    const MIN_QTY = 0.001;
     const qty = this.orderSizeUsd !== null
-      ? (this.orderSizeUsd / midPrice).toFixed(6)
+      ? Math.max(parseFloat((this.orderSizeUsd / midPrice).toFixed(3)), MIN_QTY).toFixed(3)
       : this.orderSize!;
     return {
       bid: { price: bidPrice.toFixed(0), size: qty },
