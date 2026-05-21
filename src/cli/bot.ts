@@ -19,6 +19,7 @@ const SPREAD_DOLLARS = process.env.SPREAD_DOLLARS ? parseInt(process.env.SPREAD_
 const ORDER_SIZE = process.env.ORDER_SIZE || '0.1';
 const ORDER_SIZE_USD = process.env.ORDER_SIZE_USD ? parseFloat(process.env.ORDER_SIZE_USD) : null;
 const QUOTE_INTERVAL_MS = parseInt(process.env.QUOTE_INTERVAL_MS || '5000');
+const MAX_POSITION_ORDERS = parseInt(process.env.MAX_POSITION_ORDERS || '2');
 
 if (!API_KEY || !API_SECRET || !ACCOUNT_ID) {
   console.error('Missing API_KEY, API_SECRET, or ACCOUNT_ID in environment variables');
@@ -31,7 +32,7 @@ async function main() {
   const client = new SodexClient(REST_API_URL, WS_API_URL, API_KEY!, API_SECRET!, ACCOUNT_ID);
   const pricing = new PricingEngine(SPREAD, ORDER_SIZE, SPREAD_DOLLARS, ORDER_SIZE_USD);
   
-  const mm = new MarketMaker(client, pricing, SYMBOL, SYMBOL_ID, QUOTE_INTERVAL_MS);
+  const mm = new MarketMaker(client, pricing, SYMBOL, SYMBOL_ID, QUOTE_INTERVAL_MS, MAX_POSITION_ORDERS);
   
   await mm.start();
   

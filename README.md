@@ -54,6 +54,7 @@ A TypeScript market maker bot for [SoDEX](https://sodex.com) Perpetuals, inspire
 | `ORDER_SIZE` | Order size in BTC — ignored if `ORDER_SIZE_USD` is set | `0.1` |
 | `ORDER_SIZE_USD` | Order size in USD notional (e.g. `100` = $100 per side) | — |
 | `QUOTE_INTERVAL_MS` | Re-quote interval in ms | `5000` |
+| `MAX_POSITION_ORDERS` | Max filled orders on one side before pausing that side | `2` |
 
 ## How It Works
 

@@ -132,7 +132,7 @@ export class SodexClient {
     }
   }
 
-  public async cancelOrders(symbolId: number, clOrdID: string) {
+  public async cancelOrders(symbolId: number, clOrdID: string): Promise<boolean> {
     const nonce = this.generateNonce();
 
     const params: CancelParams = {
@@ -149,7 +149,7 @@ export class SodexClient {
 
     console.log(`[SodexClient] Canceling order ${clOrdID} for symbol ${symbolId}`);
     try {
-      await axios.delete(`${this.restUrl}/trade/orders`, {
+      const response = await axios.delete(`${this.restUrl}/trade/orders`, {
         headers: {
           'Content-Type': 'application/json',
           'X-API-Key': this.apiKey,
@@ -158,8 +158,16 @@ export class SodexClient {
         },
         data: params,
       });
+      // Check if the cancel actually succeeded or if order was already filled
+      const result = response.data?.data?.[0];
+      if (result && result.code !== 0) {
+        console.log(`[SodexClient] Order ${clOrdID} was already filled (code=${result.code}: ${result.error})`);
+        return false; // filled
+      }
+      return true; // successfully cancelled
     } catch (error: any) {
       console.error('[SodexClient] Error canceling order:', error.response?.data || error.message);
+      return false;
     }
   }
 
