@@ -15,6 +15,7 @@ const ACCOUNT_ID = parseInt(process.env.ACCOUNT_ID || '0');
 const SYMBOL_ID = parseInt(process.env.SYMBOL_ID || '1');
 const SYMBOL = process.env.SYMBOL || 'BTC-USD';
 const SPREAD = parseFloat(process.env.SPREAD || '0.001');
+const SPREAD_DOLLARS = process.env.SPREAD_DOLLARS ? parseInt(process.env.SPREAD_DOLLARS) : null;
 const ORDER_SIZE = process.env.ORDER_SIZE || '0.1';
 const QUOTE_INTERVAL_MS = parseInt(process.env.QUOTE_INTERVAL_MS || '5000');
 
@@ -27,7 +28,7 @@ async function main() {
   console.log('Initializing Live SoDEX Market Maker...');
 
   const client = new SodexClient(REST_API_URL, WS_API_URL, API_KEY!, API_SECRET!, ACCOUNT_ID);
-  const pricing = new PricingEngine(SPREAD, ORDER_SIZE);
+  const pricing = new PricingEngine(SPREAD, ORDER_SIZE, SPREAD_DOLLARS);
   
   const mm = new MarketMaker(client, pricing, SYMBOL, SYMBOL_ID, QUOTE_INTERVAL_MS);
   
